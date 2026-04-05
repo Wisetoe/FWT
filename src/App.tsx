@@ -208,7 +208,9 @@ function App() {
 
                 return(
                   <div key={item.id} className={styles.card}>
-                    <img src={`https://test-front.framework.team${item.imageUrl}`} alt={item.name} className={styles.paint}/>
+                    <div className={styles.imgborder}>
+                      <img src={`https://test-front.framework.team${item.imageUrl}`} alt={item.name} className={styles.paint}/>
+                    </div>
 
                     <div className={styles.infoWrapper}>
                       <div className={styles.mainInfo}>
