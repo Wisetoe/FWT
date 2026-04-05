@@ -90,26 +90,40 @@ main{
 .card{
   position: relative;
   display: flex;
+  overflow: hidden; 
   flex-direction: column;
 
   width: clamp(280px, 22.86vw + 206.8px, 392px);
   height: clamp(185px, 6.7vw + 163.5px, 260px);
+
+  &:hover {
+    .mainInfo {
+      transform: translateY(100%); 
+      opacity: 0;
+    }
+
+    .hoverInfo {
+      transform: translateX(0); 
+      opacity: 1;
+    }
+  }
+
   @media (min-width: 768px) {
     width: clamp(352px, 5.95vw + 306.3px, 392px);
     height: clamp(233px, 4vw + 202.2px, 260px);
   }
   .arrowBox {
-  position: absolute;
-  right: 23%;
-  bottom: 0;
-  width: 24px;
-  height: 32%; 
-  background-color: var(--year); 
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: white;
-  font-size: 24px;
+    position: absolute;
+    right: 23%;
+    bottom: 0;
+    width: 24px;
+    height: 32%; 
+    background-color: var(--year); 
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 24px;
   
     @media (min-width: 1080px) {
       display: none; 
@@ -125,17 +139,38 @@ main{
   gap: clamp(20px, 1.07vw + 15.57px, 32px);
 }
 
-.names{
-  margin-top: -50px;
+.infoWrapper {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 77%;
+  height: clamp(45px, 4.688vw + 30px, 66px); 
+  overflow: hidden;
+}
+
+.mainInfo {
+  transform: translateY(0);
+  opacity: 1;
+}
+
+.hoverInfo {
+  transform: translateX(-100%); 
+  opacity: 0;
+}
+
+.mainInfo, .hoverInfo{
   z-index: 1;
   border-left: 2px solid var(--year);
   display: flex;
   flex-direction: column;
   padding-left: 20px;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.3s;
   gap: 8px;
-  @media (min-width: 768px) {
-    margin-top: -60px;
-  }
+  
   .name{
     text-transform: uppercase;
     max-width: 270px;
@@ -309,27 +344,62 @@ input:focus {
     padding-bottom: 25px;
   }
 
-  .filterInput {
+  .customSelectWrapper {
+    position: relative;
+    width: 100%;
+  }
+
+  .optionsList {
     width: 100%;
     background: var(--bg-color);
     border: 1px solid var(--input);
-    color: var(--search-text);
-    border-radius: 4px;
-    outline: none;
-    cursor: pointer;
-    -moz-appearance: none;    
-    appearance: none;         
-    padding: 8px 16px;
-
-    background-image: url('./assets/arrow.svg');
-    background-repeat: no-repeat;
-    background-position: right 16px center;
-    background-size: 20px;
+    border-top: none; 
+    border-radius: 0 0 4px 4px;
+    max-height: 175px; 
+    overflow-y: auto;
     
-    option {
-      background: var(--pagination);
-      color: var(--text-color);
+    &::-webkit-scrollbar {
+      width: 6px;
     }
+    &::-webkit-scrollbar-thumb {
+      background: var(--search-text); 
+      border-radius: 10px;
+    }
+    &::-webkit-scrollbar-track {
+      background: transparent;
+    }
+  }
+
+  .optionItem {
+    padding: 8px 16px;
+    cursor: pointer;
+    color: var(--text-color);
+    font-family: "Inter", sans-serif;
+    font-size: 14px;
+    transition: background 0.2s;
+
+    &:hover {
+      background: var(--tem); 
+      color: var(--text-color); 
+    }
+  }
+
+  .filterInput {
+    cursor: pointer;
+    color: var(--clear);
+    border:1px solid #DEDEDE;
+    display: flex;
+    align-items: center;
+    border-radius: 4px;
+    padding: 8px 16px;
+    width: auto;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    font-family: "Inter", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 300;
+    font-style: normal;
   }
 
   .yearsInputGroup {

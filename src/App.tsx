@@ -13,6 +13,7 @@ import Left from './assets/arrow-left.svg'
 import Right from './assets/arrow-right.svg'
 import Close from './assets/close_icon.svg'
 import CloseDk from './assets/close_icon_dk.svg'
+import Arrow from "./assets/arrow.svg" 
 
 import { useFilters } from './hooks/useFilter';
 import { usePagination } from './hooks/usePagination';
@@ -30,6 +31,8 @@ function App() {
   const { isFilterOpen, openSections, toggleFilter, toggleSection } = useFilterMenu();
   const { triggerFetch, handleShowResults } = useTriggerFetch();
   const { authors, locations } = useAuthorsAndLocations();
+  const [isArtistOpen, setIsArtistOpen] = useState(false);
+  const [isLocationOpen, setIsLocationOpen] = useState(false);
   const { post, totalPages, limit } = useFetchPaintings(
     currentPage, searchQuery, artistId, locationId, yearFrom, yearTo, triggerFetch
   );
@@ -93,18 +96,35 @@ function App() {
               <span>ARTIST</span>
               <span className={styles.plus}>{openSections.artist ? '−' : '+'}</span>
             </div>
+            
             {openSections.artist && (
               <div className={styles.dropdownContent}>
-                <select 
-                  className={styles.filterInput} 
-                  value={artistId} 
-                  onChange={(e) => setArtistId(e.target.value)}
-                >
-                  <option value="" hidden disabled>Select the artist</option>
-                  {authors.map(author => (
-                    <option key={author.id} value={author.id}>{author.name}</option>
-                  ))}
-                </select>
+                <div className={styles.customSelectWrapper}>
+                  <div 
+                    className={`${styles.filterInput} ${isArtistOpen ? styles.open : ''}`} 
+                    onClick={() => setIsArtistOpen(!isArtistOpen)}
+                  >
+                    <span>{authors.find(a => String(a.id) === artistId)?.name || "Select the artist"}</span>
+                    <img src={Arrow} alt="" />
+                  </div>
+                  
+                  {isArtistOpen && (
+                    <div className={styles.optionsList}>
+                      {authors.map(author => (
+                        <div 
+                          key={author.id} 
+                          className={styles.optionItem}
+                          onClick={() => {
+                            setArtistId(String(author.id));
+                            setIsArtistOpen(false);
+                          }}
+                        >
+                          {author.name}
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </div>
               </div>
             )}
           </div>
@@ -114,18 +134,35 @@ function App() {
               <span>LOCATION</span>
               <span className={styles.plus}>{openSections.location ? '−' : '+'}</span>
             </div>
+            
             {openSections.location && (
               <div className={styles.dropdownContent}>
-                <select 
-                  className={styles.filterInput} 
-                  value={locationId} 
-                  onChange={(e) => setLocationId(e.target.value)}
-                >
-                  <option value="" hidden disabled>Select the location</option>
-                  {locations.map(loc => (
-                    <option key={loc.id} value={loc.id}>{loc.location}</option>
-                  ))}
-                </select>
+                <div className={styles.customSelectWrapper}>
+                  <div 
+                    className={`${styles.filterInput} ${isLocationOpen ? styles.open : ''}`} 
+                    onClick={() => setIsLocationOpen(!isLocationOpen)}
+                  >
+                    <span>{locations.find(l => String(l.id) === locationId)?.location || "Select the location"}</span>
+                    <img src={Arrow} alt="" />
+                  </div>
+                  
+                  {isLocationOpen && (
+                    <div className={styles.optionsList}>
+                      {locations.map(loc => (
+                        <div 
+                          key={loc.id} 
+                          className={styles.optionItem}
+                          onClick={() => {
+                            setLocationId(String(loc.id));
+                            setIsLocationOpen(false); 
+                          }}
+                        >
+                          {loc.location}
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </div>
               </div>
             )}
           </div>
@@ -165,18 +202,32 @@ function App() {
         {post.length > 0 ? (
           <div>
             <div className={styles.content}>
-              {post.map((item) => (
-                <div key={item.id} className={styles.card}>
-                  <img src={`https://test-front.framework.team${item.imageUrl}`} alt={item.name} className={styles.paint}/>
-                  <div className={styles.names}>
-                    <span className={styles.name}>{item.name}</span>
-                    <span className={styles.year}>{item.created}</span>
+              {post.map((item) => {
+                const authorName = authors.find(a => a.id === item.authorId)?.name;
+                const locationName = locations.find(l => l.id === item.locationId)?.location;
+
+                return(
+                  <div key={item.id} className={styles.card}>
+                    <img src={`https://test-front.framework.team${item.imageUrl}`} alt={item.name} className={styles.paint}/>
+
+                    <div className={styles.infoWrapper}>
+                      <div className={styles.mainInfo}>
+                        <span className={styles.name}>{item.name}</span>
+                        <span className={styles.year}>{item.created}</span>
+                      </div>
+
+                      <div className={styles.hoverInfo}>
+                        <span className={styles.name}>{authorName}</span>
+                        <span className={styles.year}>{locationName}</span>
+                      </div>
+                    </div>
+
+                    <div className={styles.arrowBox}>
+                      <span>→</span>
+                    </div>
                   </div>
-                  <div className={styles.arrowBox}>
-                    <span>→</span>
-                  </div>
-                </div>
-              ))}
+                )
+              })}
             </div>
             <div className={styles.pagination}>
               <button 
