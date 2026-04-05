@@ -28,12 +28,12 @@ function App() {
   const { searchQuery, handleSearchChange } = useSearch();
   const { artistId, locationId, yearFrom, yearTo, setArtistId, setLocationId, setYearFrom, setYearTo, handleClear } = useFilters();
   const { currentPage, setCurrentPage, getPaginationItems } = usePagination();
-  const { isFilterOpen, openSections, toggleFilter, toggleSection } = useFilterMenu();
+  const { isFilterOpen, openSections, toggleFilter, toggleSection, filterRef} = useFilterMenu();
   const { triggerFetch, handleShowResults } = useTriggerFetch();
   const { authors, locations } = useAuthorsAndLocations();
   const [isArtistOpen, setIsArtistOpen] = useState(false);
   const [isLocationOpen, setIsLocationOpen] = useState(false);
-  const { post, totalPages, limit } = useFetchPaintings(
+  const { post, totalPages} = useFetchPaintings(
     currentPage, searchQuery, artistId, locationId, yearFrom, yearTo, triggerFetch
   );
 
@@ -86,7 +86,7 @@ function App() {
           />
         </div>
 
-        <div className={`${styles.sideMenu} ${isFilterOpen ? styles.open : ''}`}>
+        <div ref={filterRef}  className={`${styles.sideMenu} ${isFilterOpen ? styles.open : ''}`}>
           <div className={styles.menuHeader}>
             <img src={theme === 'light' ? Close : CloseDk} onClick={toggleFilter} alt="Close" className={styles.closeIcon} />
           </div>

@@ -76,6 +76,8 @@ main{
 }
 
 .paint{
+  transition: transform 0.4s ease-in-out;
+  object-fit: cover;
   width: clamp(280px, 22.86vw + 206.8px, 392px);
   height: clamp(185px, 6.7vw + 163.5px, 260px);
   position: relative;
@@ -97,6 +99,10 @@ main{
   height: clamp(185px, 6.7vw + 163.5px, 260px);
 
   &:hover {
+     .paint {
+      transform: scale(1.1); // Увеличиваем картинку на 10%
+    }
+
     .mainInfo {
       transform: translateY(100%); 
       opacity: 0;
